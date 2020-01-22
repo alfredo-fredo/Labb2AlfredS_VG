@@ -16,6 +16,8 @@
 		BBE1D98623D59A2F00E3DDAD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D98523D59A2F00E3DDAD /* main.m */; };
 		BBE1D99023D59A2F00E3DDAD /* Labb2AlfredSa_vblomVGTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D98F23D59A2F00E3DDAD /* Labb2AlfredSa_vblomVGTests.m */; };
 		BBE1D99B23D59A2F00E3DDAD /* Labb2AlfredSa_vblomVGUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D99A23D59A2F00E3DDAD /* Labb2AlfredSa_vblomVGUITests.m */; };
+		BBE1D9AA23D5AD3A00E3DDAD /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D9A923D5AD3A00E3DDAD /* TableViewController.m */; };
+		BBE1D9AD23D5E67400E3DDAD /* TodoData.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D9AC23D5E67400E3DDAD /* TodoData.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,10 @@
 		BBE1D99623D59A2F00E3DDAD /* Labb2AlfredSävblomVGUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Labb2AlfredSävblomVGUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBE1D99A23D59A2F00E3DDAD /* Labb2AlfredSa_vblomVGUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Labb2AlfredSa_vblomVGUITests.m; sourceTree = "<group>"; };
 		BBE1D99C23D59A2F00E3DDAD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BBE1D9A823D5AD3A00E3DDAD /* TableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
+		BBE1D9A923D5AD3A00E3DDAD /* TableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
+		BBE1D9AB23D5E67400E3DDAD /* TodoData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodoData.h; sourceTree = "<group>"; };
+		BBE1D9AC23D5E67400E3DDAD /* TodoData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodoData.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +121,10 @@
 				BBE1D98123D59A2F00E3DDAD /* LaunchScreen.storyboard */,
 				BBE1D98423D59A2F00E3DDAD /* Info.plist */,
 				BBE1D98523D59A2F00E3DDAD /* main.m */,
+				BBE1D9A823D5AD3A00E3DDAD /* TableViewController.h */,
+				BBE1D9A923D5AD3A00E3DDAD /* TableViewController.m */,
+				BBE1D9AB23D5E67400E3DDAD /* TodoData.h */,
+				BBE1D9AC23D5E67400E3DDAD /* TodoData.m */,
 			);
 			path = "Labb2AlfredSävblomVG";
 			sourceTree = "<group>";
@@ -270,6 +280,8 @@
 				BBE1D97B23D59A2D00E3DDAD /* ViewController.m in Sources */,
 				BBE1D97523D59A2D00E3DDAD /* AppDelegate.m in Sources */,
 				BBE1D98623D59A2F00E3DDAD /* main.m in Sources */,
+				BBE1D9AD23D5E67400E3DDAD /* TodoData.m in Sources */,
+				BBE1D9AA23D5AD3A00E3DDAD /* TableViewController.m in Sources */,
 				BBE1D97823D59A2D00E3DDAD /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
