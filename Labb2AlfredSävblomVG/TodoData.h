@@ -15,6 +15,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSString* date;
 @property (nonatomic) NSString* task;
 
+@property (nonatomic) int state;
+
+// State 0 Prioritize, state 1 regular, state 2 done.
+
+@property (nonatomic) enum taskStates{
+priority,
+regular,
+done
+};
+
 - (instancetype) initWithDate: (NSString *)date andTask: (NSString *)task;
  
 @end

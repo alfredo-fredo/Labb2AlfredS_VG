@@ -16,6 +16,7 @@
     if(self){
         self.date = date;
         self.task = task;
+        self.state = 1;
     }
     
     return self;

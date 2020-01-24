@@ -30,7 +30,7 @@
             // or @"yyyy-MM-dd hh:mm:ss a" if you prefer the time with AM/P
             
             TodoData *todo = [[TodoData alloc] initWithDate:[dateFormatter stringFromDate:[NSDate date]] andTask:textField.text];
-            [self.todoTasks addObject:todo];
+            [self.todoTasks insertObject:todo atIndex:0];
             
             NSLog(@"%lu", (unsigned long)self.todoTasks.count);
             
@@ -125,13 +125,18 @@ if (pGesture.state == UIGestureRecognizerStateEnded)
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Task done" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
             NSLog(@"Task done");
             
+            TodoData *d = self.todoTasks[selectedCell.row];
             [self.todoTasks removeObjectAtIndex:selectedCell.row];
+            [self.todoTasks insertObject:d atIndex:self.todoTasks.count];
             [self.tableView reloadData];
             
         }];
         
         UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
             NSLog(@"Task done");
+            
+            [self.todoTasks removeObjectAtIndex:selectedCell.row];
+            [self.tableView reloadData];
             
             /*UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                 NSLog(@"Task done");
