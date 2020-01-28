@@ -32,9 +32,9 @@
             TodoData *todo = [[TodoData alloc] initWithDate:[dateFormatter stringFromDate:[NSDate date]] andTask:textField.text];
             [self.todoTasks insertObject:todo atIndex:0];
             
-            NSLog(@"%lu", (unsigned long)self.todoTasks.count);
-            
             [self.tableView reloadData];
+            
+            [self saveData:self.todoTasks];
             
         }
 
@@ -46,7 +46,7 @@
     
     [alert addAction:defaultAction];
                                    
-                                   [alert addAction:cancelAction];
+    [alert addAction:cancelAction];
     
     [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
         textField.placeholder = @"Task";
@@ -62,8 +62,11 @@
     
     self.todoTasks = [[NSMutableArray alloc] init];
     
+    self.todoTasks = [self loadData];
+    
     UILongPressGestureRecognizer* longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPress:)];
     [self.tableView addGestureRecognizer:longPressRecognizer];
+    
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -100,10 +103,7 @@
 
 -(void)onLongPress:(UILongPressGestureRecognizer*)pGesture
 {
-if (pGesture.state == UIGestureRecognizerStateRecognized)
-{
-    NSLog(@"Klick");
-}
+
 if (pGesture.state == UIGestureRecognizerStateEnded)
 {
     UITableView* tableView = (UITableView*)self.view;
@@ -116,27 +116,35 @@ if (pGesture.state == UIGestureRecognizerStateEnded)
         UIAlertAction *prioAction = [UIAlertAction actionWithTitle:@"Prioritize" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
             
             TodoData *d = self.todoTasks[selectedCell.row];
+            d.state = priority;
+            NSLog(@"%d", d.state);
             [self.todoTasks removeObjectAtIndex:selectedCell.row];
             [self.todoTasks insertObject:d atIndex:0];
             [self.tableView reloadData];
             
+            [self saveData:self.todoTasks];
+            
         }];
         
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Task done" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-            NSLog(@"Task done");
             
             TodoData *d = self.todoTasks[selectedCell.row];
+            d.state = done;
+            NSLog(@"%d", d.state);
             [self.todoTasks removeObjectAtIndex:selectedCell.row];
             [self.todoTasks insertObject:d atIndex:self.todoTasks.count];
             [self.tableView reloadData];
             
+            [self saveData:self.todoTasks];
+            
         }];
         
         UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
-            NSLog(@"Task done");
             
             [self.todoTasks removeObjectAtIndex:selectedCell.row];
             [self.tableView reloadData];
+            
+            [self saveData:self.todoTasks];
             
             /*UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                 NSLog(@"Task done");
@@ -170,6 +178,41 @@ if (pGesture.state == UIGestureRecognizerStateEnded)
         
     }
 }
+}
+
+-(void)saveData:(NSMutableArray*)todoTask{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+
+    for (int i = 0; i < todoTask.count; i++) {
+        NSString *key = [NSString stringWithFormat:@"data%d", i];
+        
+        [dictionary setObject: [TodoData makeDictionary:todoTask[i]] forKey: key];
+    }
+
+    //NSLog(@"%lu", (unsigned long)array.count);
+
+    [userDefaults setObject:dictionary forKey:@"todoTasks"];
+    [userDefaults synchronize];
+}
+
+-(NSMutableArray*)loadData{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    NSMutableDictionary* dictionary = [[NSMutableDictionary alloc] init];
+    
+    dictionary = [userDefaults objectForKey:@"todoTasks"];
+    
+    NSMutableArray* array = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < dictionary.count; i++) {
+        NSString *key = [NSString stringWithFormat:@"data%d", i];
+        TodoData *todoData = [[TodoData alloc] init];
+        todoData = [TodoData makeTodoData:[dictionary objectForKey:key]];
+        array[i] = todoData;
+    }
+    
+    return array;
 }
 
 

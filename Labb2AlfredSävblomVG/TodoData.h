@@ -19,14 +19,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 // State 0 Prioritize, state 1 regular, state 2 done.
 
-@property (nonatomic) enum taskStates{
-priority,
-regular,
-done
-};
+typedef enum : NSUInteger {
+    priority = 0,
+    regular = 1,
+    done = 2,
+} taskStates;
 
 - (instancetype) initWithDate: (NSString *)date andTask: (NSString *)task;
  
++ (NSDictionary*) makeDictionary :(TodoData *)todoData;
+
++ (TodoData*) makeTodoData :(NSDictionary *)fromDictionary;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -16,10 +16,31 @@
     if(self){
         self.date = date;
         self.task = task;
-        self.state = 1;
+        self.state = regular;
     }
     
     return self;
+}
+
++ (NSDictionary*) makeDictionary :(TodoData *)todoData{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    
+    NSLog(@"%@ %@", todoData.date, todoData.task);
+    [dictionary setObject:todoData.date forKey: @"date"];
+    [dictionary setObject:todoData.task forKey: @"task"];
+    [dictionary setObject:[NSNumber numberWithInt:todoData.state] forKey: @"state"];
+
+    return dictionary;
+}
+
++ (TodoData*) makeTodoData :(NSDictionary *)fromDictionary{
+    TodoData *todoData = [[TodoData alloc] init];
+    
+    todoData.date = [fromDictionary objectForKey:@"date"];
+    todoData.task = [fromDictionary objectForKey:@"task"];
+    todoData.state = [[fromDictionary objectForKey:@"state"] intValue];
+    
+    return todoData;
 }
 
 @end
