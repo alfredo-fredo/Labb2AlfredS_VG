@@ -14,6 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) NSMutableArray* todoTasks;
 
+@property (nonatomic) NSMutableArray* priorityTasks;
+
+@property (nonatomic) NSMutableArray* regularTasks;
+
+@property (nonatomic) NSMutableArray* doneTasks;
+
 @end
 
 NS_ASSUME_NONNULL_END

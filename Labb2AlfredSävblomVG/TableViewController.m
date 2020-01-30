@@ -30,11 +30,11 @@
             // or @"yyyy-MM-dd hh:mm:ss a" if you prefer the time with AM/P
             
             TodoData *todo = [[TodoData alloc] initWithDate:[dateFormatter stringFromDate:[NSDate date]] andTask:textField.text];
-            [self.todoTasks insertObject:todo atIndex:0];
-            
-            [self.tableView reloadData];
+            [self.todoTasks addObject:todo];
             
             [self saveData:self.todoTasks];
+            
+            [self.tableView reloadData];
             
         }
 
@@ -62,7 +62,13 @@
     
     self.todoTasks = [[NSMutableArray alloc] init];
     
+    self.priorityTasks = [[NSMutableArray alloc] init];
+    self.regularTasks = [[NSMutableArray alloc] init];
+    self.doneTasks = [[NSMutableArray alloc] init];
+    
     self.todoTasks = [self loadData];
+    
+    [self setUpArrays:self.todoTasks];
     
     UILongPressGestureRecognizer* longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPress:)];
     [self.tableView addGestureRecognizer:longPressRecognizer];
@@ -82,21 +88,86 @@
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    
+    /*NSString* sectionName;
+    
+    switch (section) {
+        case 0:
+            sectionName = @"Priority";
+            break;
+            
+        case 1:
+            sectionName = @"Tasks";
+            break;
+            
+        case 2:
+            sectionName = @"Tasks done";
+            break;
+            
+        default:
+            sectionName = @"";
+            break;
+    } */
+    
+    return @"";
+}
 
-    return self.todoTasks.count;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    /*[self setUpArrays:self.todoTasks];
+    
+    int size = 0;
+    
+    switch (section) {
+        case 0:
+            size = (int) self.priorityTasks.count;
+            break;
+            
+        case 1:
+            size = (int) self.regularTasks.count;
+            break;
+        
+        case 2:
+            size = (int) self.doneTasks.count;
+            break;
+            
+        default:
+            size = 0;
+            break;
+    }*/
+    
+    return (int) self.todoTasks.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"todoCell" forIndexPath:indexPath];
-
-    TodoData *data = self.todoTasks[indexPath.row];
     
+    TodoData *todoData = self.todoTasks[indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@", data.task];
+    switch (todoData.state) {
+        case priority:
+            cell.textLabel.textColor = [UIColor purpleColor];
+            cell.detailTextLabel.textColor = [UIColor purpleColor];
+            break;
+         
+        case regular:
+            cell.textLabel.textColor = [UIColor blackColor];
+            cell.detailTextLabel.textColor = [UIColor blackColor];
+            break;
+            
+         case done:
+            cell.textLabel.textColor = [UIColor greenColor];
+            cell.detailTextLabel.textColor = [UIColor greenColor];
+            break;
+            
+        default:
+            break;
+    }
     
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", data.date];
+    cell.textLabel.text = todoData.task;
+    cell.detailTextLabel.text = todoData.date;
     
     return cell;
 }
@@ -120,9 +191,10 @@ if (pGesture.state == UIGestureRecognizerStateEnded)
             NSLog(@"%d", d.state);
             [self.todoTasks removeObjectAtIndex:selectedCell.row];
             [self.todoTasks insertObject:d atIndex:0];
-            [self.tableView reloadData];
             
             [self saveData:self.todoTasks];
+            
+            [self.tableView reloadData];
             
         }];
         
@@ -133,18 +205,20 @@ if (pGesture.state == UIGestureRecognizerStateEnded)
             NSLog(@"%d", d.state);
             [self.todoTasks removeObjectAtIndex:selectedCell.row];
             [self.todoTasks insertObject:d atIndex:self.todoTasks.count];
-            [self.tableView reloadData];
             
             [self saveData:self.todoTasks];
+            
+            [self.tableView reloadData];
             
         }];
         
         UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
             
             [self.todoTasks removeObjectAtIndex:selectedCell.row];
-            [self.tableView reloadData];
             
             [self saveData:self.todoTasks];
+            
+            [self.tableView reloadData];
             
             /*UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
                 NSLog(@"Task done");
@@ -180,6 +254,38 @@ if (pGesture.state == UIGestureRecognizerStateEnded)
 }
 }
 
+-(void)setUpArrays:(NSMutableArray*)todoTask{
+    
+    [self.priorityTasks removeAllObjects];
+    [self.regularTasks removeAllObjects];
+    [self.doneTasks removeAllObjects];
+    
+    for (int i = 0; i < todoTask.count; i++) {
+        
+        TodoData *data = todoTask[i];
+        
+        switch (data.state) {
+            case priority:
+                [self.priorityTasks addObject:data];
+                break;
+                
+            case regular:
+                [self.regularTasks addObject:data];
+                break;
+                
+            case done:
+                [self.doneTasks addObject:data];
+                break;
+                
+            default:
+                break;
+        }
+    }
+    
+    NSLog(@"%d, %d, %d,", (int) self.priorityTasks.count, (int) self.regularTasks.count, (int) self.doneTasks.count);
+    
+}
+
 -(void)saveData:(NSMutableArray*)todoTask{
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
@@ -190,9 +296,8 @@ if (pGesture.state == UIGestureRecognizerStateEnded)
         [dictionary setObject: [TodoData makeDictionary:todoTask[i]] forKey: key];
     }
 
-    //NSLog(@"%lu", (unsigned long)array.count);
-
     [userDefaults setObject:dictionary forKey:@"todoTasks"];
+    NSLog(@"%lu", (unsigned long)dictionary.count);
     [userDefaults synchronize];
 }
 
